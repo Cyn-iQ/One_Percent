@@ -35,8 +35,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       final json = await widget.repository.exportAllToJsonString();
       final fileName = await widget.repository.buildExportFileName();
 
-      final dir = await getApplicationDocumentsDirectory();
+      // 改为临时目录，避免部分安卓设备/版本上 path_provider 文档目录异常
+      final dir = await getTemporaryDirectory();
       final file = File('${dir.path}/$fileName');
+
       await file.writeAsString(json);
 
       await Share.shareXFiles(
@@ -277,7 +279,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   color: onSurfaceVariant,
                   height: 1.5,
                 ),
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -285,14 +287,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
-                        color: Colors.black,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Text('1. 导出内容包含二级属性、历史记录、每日快照和版本信息。'),
-                    Text('2. 当前导入方式为覆盖导入，不做合并。'),
-                    Text('3. 归档不是删除，归档数据会被正常导出。'),
-                    Text('4. 本应用核心数据保存在本地设备，可离线使用。'),
+                    const SizedBox(height: 10),
+                    const Text('1. 导出内容包含二级属性、历史记录、每日快照和版本信息。'),
+                    const Text('2. 当前导入方式为覆盖导入，不做合并。'),
+                    const Text('3. 归档不是删除，归档数据会被正常导出。'),
+                    const Text('4. 导出文件会先写入临时目录，再调用系统分享。'),
+                    const Text('5. 若系统清理缓存，临时目录中的备份文件可能被删除，因此导出后建议立即保存到其他位置。'),
                   ],
                 ),
               ),

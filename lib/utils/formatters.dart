@@ -1,11 +1,18 @@
 class AppFormatters {
+  static String _trimTrailingZeros(String value) {
+    if (!value.contains('.')) return value;
+    value = value.replaceFirst(RegExp(r'0+$'), '');
+    value = value.replaceFirst(RegExp(r'\.$'), '');
+    return value;
+  }
+
   static String score(double value) {
-    return value.toStringAsFixed(1);
+    return _trimTrailingZeros(value.toStringAsFixed(2));
   }
 
   static String delta(double value) {
     final prefix = value > 0 ? '+' : '';
-    return '$prefix${value.toStringAsFixed(1)}';
+    return '$prefix${_trimTrailingZeros(value.toStringAsFixed(2))}';
   }
 
   static String percentage(double value) {

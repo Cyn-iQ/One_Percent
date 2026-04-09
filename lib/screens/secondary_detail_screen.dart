@@ -93,7 +93,7 @@ class _SecondaryDetailScreenState extends State<SecondaryDetailScreen> {
 
   Future<void> _pickCustomDelta() async {
     final controller = TextEditingController(
-      text: _selectedDelta?.toStringAsFixed(1) ?? '',
+      text: _selectedDelta?.toString() ?? '',
     );
 
     final result = await showDialog<double>(
